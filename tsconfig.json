@@ -12,6 +12,11 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "App.js",
+    "./src",
+    "lib/supabase.ts",
+    "store/useUserStore.tsx",
+    "nativewind-env.d.ts"
   ]
 }
