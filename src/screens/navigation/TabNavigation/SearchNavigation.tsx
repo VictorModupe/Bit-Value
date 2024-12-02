@@ -11,11 +11,12 @@ const SearchNavigation = () => {
       screenOptions={{
         headerShown:false,
         ...TransitionPresets.SlideFromRightIOS,
+        ...TransitionPresets.FadeFromRightAndroid,
         animationEnabled: true,
         gestureEnabled:true,
         gestureDirection:"horizontal",
       }}>
-        <Stack.Screen name='Search' component={SearchScreen}/>
+        <Stack.Screen name='SearchS' component={SearchScreen}/>
       </Stack.Navigator>
   );
 };

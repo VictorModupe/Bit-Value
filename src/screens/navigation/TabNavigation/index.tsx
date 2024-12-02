@@ -24,7 +24,7 @@ const TabNavigation = () => {
           } else if (route.name === 'Market') {
             iconName = 'stats-chart-outline';
           } else if (route.name === 'Search') {
-            iconName = 'pearch-outline';
+            iconName = 'search-outline';
           } else if (route.name === 'News') {
             iconName = 'newspaper-outline';
           } else if (route.name === 'Profile') {
@@ -35,11 +35,11 @@ const TabNavigation = () => {
             <Ionicons
               name={iconName}
               size={25}
-              color={focused ? '#164b48' : 'gray'}
+              color={focused ? '#7c04e0' : 'gray'}
             />
           );
         },
-        tabBarActiveTintColor: '#164b48',
+        tabBarActiveTintColor: '#7c04e0',
         tabBarInactiveTintColor: 'gray',
         tabBarLabelStyle: {
           fontSize: 12,

@@ -5,6 +5,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  Image
 } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,7 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FetchAllCoins } from '@/utils/cryptoapi';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import numeral from 'numeral';
-import { Image } from 'expo-image';
+// import { Image } from 'expo-image';
 
 interface Coin {
   uuid: string;
@@ -40,6 +41,12 @@ const HomeScreen = () => {
   async function handleGetProfile() {
     setLoading(true);
 
+    if (IsAllCoinsLoading) {
+      return <ActivityIndicator size="large" color="black" />;
+    } else if (CoinsData?.data?.coins?.length === 0 || !CoinsData) {
+      return <Text>No data available. Please try again later.</Text>;
+    }
+
     try {
       const { data, error, status } = await getUserProfile();
       if (error && status !== 406) {
@@ -54,9 +61,7 @@ const HomeScreen = () => {
       console.log(error);
     } finally {
       setLoading(false);
-    }
-  }
-
+    }}
   useFocusEffect(
     useCallback(() => {
       if (session) {
@@ -64,7 +69,6 @@ const HomeScreen = () => {
       }
     }, [session])
   );
-  
   const { data: CoinsData, isLoading: IsAllCoinsLoading } = useQuery({
     queryKey: ['allCoins'],
     queryFn: FetchAllCoins,
@@ -72,8 +76,7 @@ const HomeScreen = () => {
   const renderItem = ({ item, index }: { item: Coin; index: number }) => (
     <Pressable
       className="flex-row w-full py-4 items-center"
-      onPress={() => navigate('CoinDetails', { coinUuid: item.uuid })}
-    >
+      onPress={() => navigate('CoinDetails', { coinUuid: item.uuid })}>
       <Animated.View
         entering={FadeInDown.duration(100).delay(index * 200).springify()}
         className="w-full flex-row items-center"
@@ -113,7 +116,7 @@ const HomeScreen = () => {
           
           <View className='flex-row justify-center items-center space-x-2'>
             <Text className="font-medium text-sm text-neutral-500">
-            {/* {numeral(parseFloat(item.marketCap)).format('0.0a').toUpperCase()} */}
+            {numeral(parseFloat(item.marketCap)).format('0.0a').toUpperCase()}
             {item.marketCap.length > 9
               ? item.marketCap.slice(0,9)
             :item.marketCap}
@@ -140,6 +143,7 @@ const HomeScreen = () => {
               <Avatar url={avatarUrl} size={50} />
               </View>
             </View>
+
             <View>
               <Text className="text-lg font-bold">
                 Hi, {username ? username : "User"} 
@@ -149,17 +153,21 @@ const HomeScreen = () => {
               </Text>
             </View>
           </View>
-          <Ionicons name="menu" size={24} color="white" />
+          <View className='py-6'>
+          <View className='bg-neutral-700 rounded-lg p-1'>
+            <Ionicons name="search" size={24} color="white" />
+          </View>
+          </View>
         </View>
 
         {/* Balance */}
-        <View className='mx-4 bg-neutral-800 rounded-[34px] overflow-hidden mt-4 mb-4'>
-          <View className='bg-[#5e1150] justify-center tems-center py-6 rounded-[34px]'>
-            <Text className='text-sm font-medium text-neutral-700'>
+        <View className='mx-4 bg-neutral-800 rounded-[4px] overflow-hidden mt-4 mb-4'>
+          <View className='bg-[#7c04e0] justify-center items-center py-6 rounded-[5px]'>
+            <Text className='text-sm font-medium text-neutral-800'>
               Total Balance
             </Text>
 
-            <Text className='text-3xl font-extrabold'>$10,000.00</Text>
+            <Text className='text-3xl font-extrabold text-neutral-50'>$10,000.00</Text>
           </View>
 
           <View className='justify-between items-center flex-row py-4'>
@@ -216,7 +224,7 @@ const HomeScreen = () => {
               <Text className='text-white'>More </Text>
             </View>
             
-
+            console.log(CoinsData?.data?.coins);
             
           </View>
         </View>
@@ -233,7 +241,7 @@ const HomeScreen = () => {
             <FlatList
               nestedScrollEnabled={true}
               scrollEnabled={false}
-              data={CoinsData?.data?.coins || []}
+              data={CoinsData?.data?.coins}
               keyExtractor={(item) => item.uuid}
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}

@@ -6,13 +6,9 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Avatar from '@/src/components/Avatar';
-import useSupabaseAuth from '@/hooks/useSupaBaseAuth';
-import { useUserStore } from '@/store/useUserStore';
-import { useFocusEffect, useNavigation, NavigationProp } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { FetchAllCoins } from '@/utils/cryptoapi';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -39,29 +35,24 @@ const MarketScreen= () => {
     setActive("all");
   };
 
-  const calculateTopGainers =()=>{
-    setActive("Gainers");
 
-    const gainers = CoinsData.data.coins.filters(
+
+  const calculateTopGainers = () => {
+    // if (!CoinsData || !CoinsData.data) return;
+    setActive("gainers");
+    const gainers = CoinsData.data.coins.filter(
       (coin) => parseFloat(coin.change) > 0
     );
-
     setTopGainers(gainers);
   };
 
-    const calculateTopLosers =()=>{
-      setActive("Gainers");
-    } 
-      const losers = CoinsData.data.coins.filter(
-        (coin) => parseFloat(coin.change) < 0
-      );
-
-      setTopLoser(losers);
-    };
-
-
-
-
+  const calculateTopLosers = () => {
+    setActive("losers");
+    const losers = CoinsData.data.coins.filter(
+      (coin) => parseFloat(coin.change) < 0
+    );
+    setTopLoser(losers);
+  };
 
 
 
@@ -133,22 +124,46 @@ const MarketScreen= () => {
       <View className="relative">
         {/* Header */}
         <View className='w-full flex-row items-center px-4 pb-4'>
-        <View className='w-3/4 flex-row space-x-2'>
+          <View className='w-3/4 flex-row space-x-2'>
 
-          <View>
-            <Text className='text-3xl font-bold'>Market</Text>
+            <View>
+              <Text className='text-3xl font-bold'>Market</Text>
+            </View>
+            </View>
           </View>
-          </View>
+
         </View>
-
         <View className='px-4 flex-row justify-between items-center pb-4'>
+          {/* All */}
           <Pressable 
           className={`w-1/4 justify-center items-center py-1 ${
-            active === "all" ? "border-b-4 border-blue-500" : ""
+            active === "all" ? "border-b-4 border-[#7c04e0]" : ""
           }`}
           onPress={allCoins}
           ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>
               All
+              </Text>  
+
+          </Pressable>
+          {/* Gainers */}
+          <Pressable 
+          className={`w-1/4 justify-center items-center py-1 ${
+            active === "gainers" ? "border-b-4 border-[#7c04e0]" : ""
+          }`}
+          onPress={calculateTopGainers}
+          ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>
+              Gainers
+              </Text>  
+
+          </Pressable>
+          {/* Losers */}
+          <Pressable 
+          className={`w-1/4 justify-center items-center py-1 ${
+            active === "losers" ? "border-b-4 border-[#7c04e0]" : ""
+          }`}
+          onPress={calculateTopLosers}
+          ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>
+              Losers
               </Text>  
 
           </Pressable>
@@ -159,21 +174,60 @@ const MarketScreen= () => {
           showsVerticalScrollIndicator={false}
           >
           <View className='px-4 py-8 items-center'>
-            {IsAllCoinsLoading ? (
-              <ActivityIndicator size="large" color="black" />
-            ) : (
-            <FlatList
-              nestedScrollEnabled={true}
-              scrollEnabled={false}
-              data={CoinsData?.data?.coins}
-              keyExtractor={(item) => item.uuid}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={false}
-            />
-          )}
+              {/* All */}
+            {active === "all" && (
+                <View className='px-4 items-center'>
+                   {IsAllCoinsLoading ? (
+                      <ActivityIndicator size="large" color="black" />
+                    ) : (
+                    <FlatList
+                      nestedScrollEnabled={true}
+                      scrollEnabled={false}
+                      data={CoinsData?.data?.coins}
+                      keyExtractor={(item) => item.uuid}
+                      renderItem={renderItem}
+                      showsVerticalScrollIndicator={false}
+                        />
+                      )}
+                </View>
+              )}
+              {/* Gainers */}
+            {active === "gainers" && (
+                <View className='px-4 items-center'>
+                   {IsAllCoinsLoading ? (
+                      <ActivityIndicator size="large" color="black" />
+                    ) : (
+                    <FlatList
+                      nestedScrollEnabled={true}
+                      scrollEnabled={false}
+                      data={active === "gainers" ? topGainers : CoinsData.data.coins}
+                      keyExtractor={(item) => item.uuid}
+                      renderItem={renderItem}
+                      showsVerticalScrollIndicator={false}
+                        />
+                      )}
+                </View>
+              )}
+              {/* Losers */}
+            {active === "losers" && (
+                <View className='px-4 items-center'>
+                   {IsAllCoinsLoading ? (
+                      <ActivityIndicator size="large" color="black" />
+                    ) : (
+                    <FlatList
+                      nestedScrollEnabled={true}
+                      scrollEnabled={false}
+                      data={active === "losers" ? topLoser : CoinsData.data.coins}
+                      keyExtractor={(item) => item.uuid}
+                      renderItem={renderItem}
+                      showsVerticalScrollIndicator={false}
+                        />
+                      )}
+                </View>
+              )}
+           
           </View>
         </ScrollView>
-      </View>
     </SafeAreaView>
   );
 };

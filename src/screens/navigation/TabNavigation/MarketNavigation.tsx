@@ -12,6 +12,7 @@ const MarketNavigation = () => {
       screenOptions={{
         headerShown:false,
         ...TransitionPresets.SlideFromRightIOS,
+        ...TransitionPresets.FadeFromRightAndroid,
         animationEnabled: true,
         gestureEnabled:true,
         gestureDirection:"horizontal",
