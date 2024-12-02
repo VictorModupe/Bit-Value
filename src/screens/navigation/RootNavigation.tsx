@@ -30,8 +30,8 @@ const RootNavigation = () => {
                     component={TabNavigation} />
                 ) : (
                     <Stack.Screen 
-                    name='TabNavigation' 
-                    component={TabNavigation} />
+                    name='AuthNavigation' 
+                    component={AuthNavigation} />
                 )
             }
         </Stack.Navigator>

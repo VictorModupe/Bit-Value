@@ -140,7 +140,13 @@ const HomeScreen = () => {
           <View className="w-3/4 flex-row space-x-2">
             <View className="justify-center items-center">
               <View className="h-12 w-12 rounded-2xl overflow-hidden">
-              <Avatar url={avatarUrl} size={50} />
+              <Avatar 
+                url={avatarUrl} 
+                size={50} 
+                onUpload=
+              {function (filePath: string): void {
+                  throw new Error('Function not implemented.');
+                } } />
               </View>
             </View>
 
@@ -155,7 +161,7 @@ const HomeScreen = () => {
           </View>
           <View className='py-6'>
           <View className='bg-neutral-700 rounded-lg p-1'>
-            <Ionicons name="search" size={24} color="white" />
+            <Ionicons name="wallet" size={24} color="white" />
           </View>
           </View>
         </View>

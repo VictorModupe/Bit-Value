@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -7,6 +7,10 @@ import {
     ShareIcon,
 } from "react-native-heroicons/outline";
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native';
+import {WebView} from "react-native-webview";
+
+const {height, width} = Dimensions.get("window");
 
 const NewsDetailsScreen = () => {
   const navigation = useNavigation();
@@ -33,8 +37,27 @@ const NewsDetailsScreen = () => {
                 </View>
             </View>
         </View>
+
+        <WebView 
+            source={{
+                uri: item.url,
+            }}
+            onLoadStart={() => setVisible(true)}
+            onLoadEnd={()=> setVisible(false)}
+        />
+        {visible && (
+                <ActivityIndicator 
+                    size="large"
+                    color="green"
+                    style={{
+                        position:"absolute",
+                        top: height/2,
+                        left: width/2,
+                    }}
+                />
+            )}
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default NewsDetailsScreen;

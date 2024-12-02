@@ -39,7 +39,7 @@ const SearchScreen =()=>{
 
         const renderItem = ({ item, index }: { item: Coin; index: number }) => (
           <Pressable
-            className="flex-row w-full py-4 items-center"
+            className="flex-row w-full py-4 items-center px-4"
             onPress={() => navigate('CoinDetails', { coinUuid: item.uuid })}
             key={item.uuid}
             >

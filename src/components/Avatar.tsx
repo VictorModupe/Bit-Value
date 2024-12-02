@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { StyleSheet, View, Alert, Image, Pressable, ActivityIndicator, Text } from "react-native";
+import { StyleSheet, View, Alert, Image, Pressable, ActivityIndicator } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -39,30 +39,46 @@ const Avatar = ({ url, size = 150, onUpload, showUpload = false }: Props) => {
 
   async function uploadAvatar() {
     try {
+      setUploading(true);
+
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection:false,
         allowsEditing: true,
         quality: 1,
+        exif: false,
       });
 
-      if (!result.cancelled) {
-        setUploading(true);
+      if (result.canceled || !result.assets || result.assets.length === 0 ) {
+        console.log("User cancelled Image Picker");
+        return;
+      }
 
-        const file = await fetch(result.uri);
-        const blob = await file.blob();
-        const filePath = `avatars/${Date.now()}-${result.uri.split("/").pop()}`;
+      const image = result.assets[0];
+      console.log("Got Image", image);
 
-        const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, blob);
-
+        if(!image.uri){
+          throw new Error("No image uri!");
+        }
+        const arraybuffer = await fetch(image.uri).then((res) => 
+          res.arrayBuffer()
+      )
+        const fileExt = image.uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
+        const path = `${Date.now()}.${fileExt}`;
+        const {data, error: uploadError} = await supabase.storage
+          .from("avatars")
+          .upload(path, arraybuffer, {
+            contentType: image.mimeType ?? "image/jpeg",
+          });
         if (uploadError) throw uploadError;
 
-        onUpload(filePath);
-        setAvatarUrl(result.uri);
-      }
+        onUpload(data.path);
     } catch (error) {
       if (error instanceof Error) {
-        console.log("Error uploading avatar: ", error.message);
-        Alert.alert("Upload Failed", "Could not upload the avatar. Please try again.");
+        // console.log("Error uploading avatar: ", error.message);
+        Alert.alert(error.message);
+      } else {
+        throw error;
       }
     } finally {
       setUploading(false);
@@ -70,55 +86,54 @@ const Avatar = ({ url, size = 150, onUpload, showUpload = false }: Props) => {
   }
 
   return (
-    <View style={[styles.avatarContainer, avatarSize]}>
-      {avatarUrl ? (
-        <Image 
-        source={{ uri: avatarUrl }} 
-        style={[avatarSize, styles.image]} 
-        accessibilityLabel="Avatar" />
-      ) : (
-        <View 
-          className="justify-center items-center" 
-          style={[styles.avatar, avatarSize, styles.image]}>
-          <ActivityIndicator color="white" />
-        </View>
-      )}
-      {showUpload && (
-        <Pressable style={styles.uploadButton} onPress={uploadAvatar} disabled={uploading}>
-          {uploading ? (
-            <ActivityIndicator color="black" />
-          ) : (
-            <MaterialIcons name="cloud-upload" size={24} color="black" />
-          )}
-        </Pressable>
-      )}
+    <View>
+  {avatarUrl ? (
+    <Image
+      source={{ uri: avatarUrl }}
+      style={[avatarSize, styles.image, styles.avatar]}
+      accessibilityLabel="Avatar"
+    />
+  ) : (
+    <View
+      style={[styles.avatar, avatarSize, styles.image]}
+      className="justify-center items-center">
+      <ActivityIndicator color="white" />
     </View>
+  )}
+  {showUpload && (
+    <Pressable
+      style={styles.uploadButton}
+      onPress={uploadAvatar}
+      disabled={uploading}>
+      {uploading ? (
+        <ActivityIndicator color="black" />
+      ) : (
+        <MaterialIcons name="cloud-upload" size={24} color="black" />
+      )}
+    </Pressable>
+  )}
+</View>
+
   );
 };
-
 export default Avatar;
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    position: "relative",
-    borderRadius: 75, // Circular avatars
+  avatar: {
+    borderRadius: 999,
     overflow: "hidden",
   },
   image: {
     resizeMode: "cover",
-  },
-  placeholder: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "gray",
-    borderRadius: 75,
+    backgroundColor: "#ccc",
   },
   uploadButton: {
     position: "absolute",
-    right: 10,
-    bottom: 10,
+    bottom: 0,
+    right: 0,
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 5,
+    borderRadius: 50,
+    padding: 8,
   },
 });
+

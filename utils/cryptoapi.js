@@ -33,7 +33,7 @@ const CryptoApiCall = async (endpoints, params) => {
 const NewsApiCall = async (endpoints) => {
             const options = {
                 method: "GET",
-                url: endpoints,
+                url: endpoints, 
                 params: params ? params: {},
                 headers:{
                     "X-RapidAPI-Key": `${XRapidAPIKey}`,
@@ -69,6 +69,6 @@ export const SearchCoins = async (search) => {
     return await CryptoApiCall(endpoints);
 }
 
-export const FetchCryptoNews = async (search) => {
+export const FetchCryptoNews = async () => {
     return await NewsApiCall(newsUrl);
 }

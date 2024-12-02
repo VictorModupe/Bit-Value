@@ -60,7 +60,6 @@ export default function useSupabaseAuth(){
         username: string,
         fullName: string,
         avatarUrl: string,
-        website: string,
      ) {
         if(!session?.user) throw new Error("No user on the session!");
 
@@ -68,7 +67,6 @@ export default function useSupabaseAuth(){
             id: session?.user.id,
             username,
             full_name: fullName,
-            website:website,
             avatarUrl:avatarUrl,
             updated_at: new Date(),
         };

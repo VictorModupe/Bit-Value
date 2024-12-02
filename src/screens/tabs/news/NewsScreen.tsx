@@ -15,15 +15,15 @@ const NewsScreen = () => {
     queryFn: FetchCryptoNews,
   });
 
-  const navigation = useNavigation();
+const navigation = useNavigation();
 
-  const handleClick = (item) => {
-    navigation.navigate("NewsDetails", item);
-  };
+const handleClick = (item) => {
+    navigation.navigate( "NewsDetails", item);
+};
 
-  const renderItem = ({item, index}) => {
-    return(
-      <Pressable 
+const renderItem = ({item, index}) => {
+  return(
+    <Pressable 
       className='mb-4 mx-4 space-y-1'
       key={index}
       onPress={()=> handleClick(item)}
