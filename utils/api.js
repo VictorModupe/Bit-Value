@@ -1,7 +1,7 @@
-export const apiToken = "";
+export const apiToken = "CBjmSkbUlKXC9VG00zaS8UaHdpbP";
 
-export const XRapidAPIKey = "2daa02b16cmsh48ead755bca8ec5p183b94jsn9cce4e3b2852";
+export const XRapidAPIKey = "7d1f8560demsh5149a193055cd8fp16d3dejsn1a56f6c0de58";
 
-export const XRapidAPIHost = "https://coinranking1.p.rapidapi.com";
+export const XRapidAPIHost = "coinranking1.p.rapidapi.com";
 
-export const XRapidAPIHostNews = "" 
+export const XRapidAPIHostNews = "cryptocurrency-news2.p.rapidapi.com" 

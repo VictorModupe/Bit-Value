@@ -16,7 +16,7 @@
     "App.js",
     "./src",
     "lib/supabase.ts",
-    "store/useUserStore.tsx",
+    "store/useUserStore.ts",
     "nativewind-env.d.ts"
   ]
 }

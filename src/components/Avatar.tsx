@@ -11,7 +11,7 @@ interface Props {
   showUpload?: boolean;
 }
 
-const Avatar = ({ url, size = 150, onUpload, showUpload = false }: Props) => {
+const Avatar = ({ url, size = 150, onUpload, showUpload = true }: Props) => {
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const avatarSize = { height: size, width: size };
@@ -22,8 +22,14 @@ const Avatar = ({ url, size = 150, onUpload, showUpload = false }: Props) => {
 
   async function downloadImage(path: string) {
     try {
-      const { data, error } = await supabase.storage.from("avatars").download(path);
-      if (error) throw error;
+      const { data, error } = await supabase.storage
+      .from("avatars")
+      .download(path);
+
+      if (error) {
+        throw error
+        console.log(error)
+      };
 
       const reader = new FileReader();
       reader.readAsDataURL(data);
@@ -88,32 +94,32 @@ const Avatar = ({ url, size = 150, onUpload, showUpload = false }: Props) => {
   return (
     <View>
   {avatarUrl ? (
+    <View className="relative">
     <Image
       source={{ uri: avatarUrl }}
       style={[avatarSize, styles.image, styles.avatar]}
       accessibilityLabel="Avatar"
     />
+    </View>
   ) : (
     <View
       style={[styles.avatar, avatarSize, styles.image]}
       className="justify-center items-center">
-      <ActivityIndicator color="white" />
+      <ActivityIndicator color="purple" />
     </View>
   )}
   {showUpload && (
-    <Pressable
-      style={styles.uploadButton}
-      onPress={uploadAvatar}
-      disabled={uploading}>
-      {uploading ? (
-        <ActivityIndicator color="black" />
-      ) : (
-        <MaterialIcons name="cloud-upload" size={24} color="black" />
+    <View className="absolute right-0 bottom-0">      
+      {!uploading ? (
+        <Pressable>
+          <MaterialIcons name="cloud-upload" size={24} color="black" />
+          </Pressable>
+        ) : (
+        <ActivityIndicator color="purple" size={40}/>
       )}
-    </Pressable>
-  )}
-</View>
-
+    </View>
+    )}
+    </View>
   );
 };
 export default Avatar;

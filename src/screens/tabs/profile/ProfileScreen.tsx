@@ -60,7 +60,7 @@ const ProfileScreen = () => {
     <View className='flex-1 bg-white'>
       <View>
          {/* Avatar */}
-        <View className='justify-center items-center py-14 pb-20 bg-[#7c04e0]'>
+        <View className='justify-center items-center py-14 pb-20 bg-[#5170ff]'>
           <View className='overflow-hidden border-2 border-white rounded-full'>
             <Avatar size={100} url={avatarUrl} onUpload={function (filePath: string): void {
               throw new Error('Function not implemented.');}}/>
@@ -80,11 +80,11 @@ const ProfileScreen = () => {
         </View>
 
         {/* Edit My Profile */}
-        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-300 my-3 mx-2'>
+        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-100 my-3 mx-2'>
           <Pressable className='flex-row justify-between items-center'
             onPress={() => navigation.navigate("EditProfileScreen")}>
               <View className='flex-row justify-center items-center space-x-2'>
-                <View className='bg-[#7c04e0] p-1 rounded-lg'>
+                <View className='bg-[#5170ff] p-1 rounded-lg'>
                   <MaterialIcons name="person-2" size={24} color="white" />
                 </View>
                 <Text className='text-lg text-gray-600 font-semibold p-3'>
@@ -96,11 +96,11 @@ const ProfileScreen = () => {
         </View>
 
         {/* Change Password*/}
-        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-300 my-3 mx-2'>
+        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-100 my-3 mx-2'>
           <Pressable className='flex-row justify-between items-center'
             onPress={() => handleSignOut()}>
               <View className='flex-row justify-center items-center space-x-2'>
-                <View className='bg-[#7c04e0] p-1 rounded-lg'>
+                <View className='bg-[#5170ff] p-1 rounded-lg'>
                   <MaterialIcons name="password" size={24} color="white" />
                 </View>
                 <Text className='text-lg text-gray-600 font-semibold p-3'>
@@ -112,11 +112,11 @@ const ProfileScreen = () => {
         </View>
 
         {/*Log-Out */}
-        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-300 my-3 mx-2'>
+        <View className='p-2 py-3 bg-gray-100 rounded-xl border-2 border-gray-100 my-3 mx-2'>
           <Pressable className='flex-row justify-between items-center'
             onPress={() => handleSignOut()}>
               <View className='flex-row justify-center items-center space-x-2'>
-                <View className='bg-[#7c04e0] p-1 rounded-lg'>
+                <View className='bg-[#5170ff] p-1 rounded-lg'>
                   <MaterialIcons name="logout" size={24} color="white" />
                 </View>
                 <Text className='text-lg text-gray-600 font-semibold p-3'>

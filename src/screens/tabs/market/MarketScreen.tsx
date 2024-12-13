@@ -137,7 +137,7 @@ const MarketScreen= () => {
           {/* All */}
           <Pressable 
           className={`w-1/4 justify-center items-center py-1 ${
-            active === "all" ? "border-b-4 border-[#7c04e0]" : ""
+            active === "all" ? "border-b-4 border-[#5170ff]" : ""
           }`}
           onPress={allCoins}
           ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>
@@ -148,7 +148,7 @@ const MarketScreen= () => {
           {/* Gainers */}
           <Pressable 
           className={`w-1/4 justify-center items-center py-1 ${
-            active === "gainers" ? "border-b-4 border-[#7c04e0]" : ""
+            active === "gainers" ? "border-b-4 border-[#5170ff]" : ""
           }`}
           onPress={calculateTopGainers}
           ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>
@@ -159,7 +159,7 @@ const MarketScreen= () => {
           {/* Losers */}
           <Pressable 
           className={`w-1/4 justify-center items-center py-1 ${
-            active === "losers" ? "border-b-4 border-[#7c04e0]" : ""
+            active === "losers" ? "border-b-4 border-[#5170ff]" : ""
           }`}
           onPress={calculateTopLosers}
           ><Text className={`text-lg ${active === "all" ? "font-extrabold" : ""}`}>

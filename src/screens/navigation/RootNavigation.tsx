@@ -11,8 +11,8 @@ import { useUserStore } from '@/store/useUserStore';
 const Stack = createStackNavigator(); 
 
 const RootNavigation = () => {
-    const {session} = useUserStore(); 
-    console.log('Session:', session);
+    const [session, setSession] = useState(true)
+    // console.log('Session:', session);
   return (
     <NavigationContainer>
         <Stack.Navigator
@@ -30,8 +30,8 @@ const RootNavigation = () => {
                     component={TabNavigation} />
                 ) : (
                     <Stack.Screen 
-                    name='AuthNavigation' 
-                    component={AuthNavigation} />
+                    name='TabNavigation' 
+                    component={TabNavigation} />
                 )
             }
         </Stack.Navigator>

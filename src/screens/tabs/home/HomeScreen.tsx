@@ -18,7 +18,10 @@ import { useQuery } from '@tanstack/react-query';
 import { FetchAllCoins } from '@/utils/cryptoapi';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import numeral from 'numeral';
+import FloatingButton from '../../Float';
+import CoinDetailsScreen from '../../stacks/CoinDetailsScreen';
 // import { Image } from 'expo-image';
+
 
 interface Coin {
   uuid: string;
@@ -30,6 +33,7 @@ interface Coin {
   change: number;
 }
 
+
 const HomeScreen = () => {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [username, setUsername] = useState('');
@@ -37,6 +41,8 @@ const HomeScreen = () => {
   const { getUserProfile } = useSupabaseAuth();
   const { session } = useUserStore();
   const {navigate}: NavigationProp<ScreenNavigationType> = useNavigation();
+
+
 
   async function handleGetProfile() {
     setLoading(true);
@@ -65,7 +71,7 @@ const HomeScreen = () => {
   useFocusEffect(
     useCallback(() => {
       if (session) {
-        handleGetProfile();
+        handleGetProfile()
       }
     }, [session])
   );
@@ -76,25 +82,31 @@ const HomeScreen = () => {
   const renderItem = ({ item, index }: { item: Coin; index: number }) => (
     <Pressable
       className="flex-row w-full py-4 items-center"
-      onPress={() => navigate('CoinDetails', { coinUuid: item.uuid })}>
+      onPress={() => navigate('CoinDetails', { coinUuid: item.uuid })}
+      >
+
       <Animated.View
-        entering={FadeInDown.duration(100).delay(index * 200).springify()}
+        entering={FadeInDown.duration(100)
+          .delay(index * 200)
+          .springify()}
         className="w-full flex-row items-center"
       >
         <View className="w-[16%]">
-          <View className="w-10 h-10">
-            <Image
-              source={{ uri: item.iconUrl }}
-              contentFit='cover'
-              transition={1000}
-              className='w-full h-full flex-1'
-            />
+          <View>
+            <View className="w-10 h-10">
+              <Image
+                source={{ uri: item.iconUrl }}
+                contentFit='cover'
+                transition={1000}
+                className='w-full h-full flex-1'
+              />
+            </View>
           </View>
         </View>
         <View className="w-[55%] justify-start items-start">
           <Text className="font-bold text-lg">{item.name}</Text>
           <View className="flex-row justify-center items-center space-x-2">
-            <Text className="font-medium text-sm text-neutral-500">
+            <Text className={`font-medium text-base text-neutral-500`}>
               {numeral(parseFloat(item?.price)).format('$0,0.00')}
             </Text>
             <Text
@@ -104,7 +116,8 @@ const HomeScreen = () => {
                   : item.change > 0
                   ? 'text-green-600'
                   : 'text-gray-600'
-              }`}
+              }`
+            }
             >
               {item.change}%
             </Text>
@@ -155,12 +168,12 @@ const HomeScreen = () => {
                 Hi, {username ? username : "User"} 
               </Text>
               <Text className="text-sm text-neutral-500">
-                Have a Nice Day.
+                How was your day?.
               </Text>
             </View>
           </View>
-          <View className='py-6'>
-          <View className='bg-neutral-700 rounded-lg p-1'>
+          <View className='py-6 '>
+          <View className='bg-[#5170ff] rounded-lg p-1'>
             <Ionicons name="wallet" size={24} color="white" />
           </View>
           </View>
@@ -168,12 +181,13 @@ const HomeScreen = () => {
 
         {/* Balance */}
         <View className='mx-4 bg-neutral-800 rounded-[4px] overflow-hidden mt-4 mb-4'>
-          <View className='bg-[#7c04e0] justify-center items-center py-6 rounded-[5px]'>
-            <Text className='text-sm font-medium text-neutral-800'>
-              Total Balance
+          <View className='bg-[#5170ff] justify-center items-center py-6 rounded-[5px]'>
+            
+            <Text className='text-sm font-medium text-neutral-100'>
+              Wallet Balance
             </Text>
 
-            <Text className='text-3xl font-extrabold text-neutral-50'>$10,000.00</Text>
+            <Text className='text-3xl font-extrabold text-neutral-50'>$13,621</Text>
           </View>
 
           <View className='justify-between items-center flex-row py-4'>
@@ -230,7 +244,6 @@ const HomeScreen = () => {
               <Text className='text-white'>More </Text>
             </View>
             
-            console.log(CoinsData?.data?.coins);
             
           </View>
         </View>
@@ -242,20 +255,27 @@ const HomeScreen = () => {
           >
           <View className='px-4 py-8 items-center'>
             {IsAllCoinsLoading ? (
-              <ActivityIndicator size="large" color="black" />
-            ) : (
+              <ActivityIndicator size="large" color="purple" />
+            ) : CoinsData && CoinsData.data && CoinsData.data.coins ? (
+
             <FlatList
               nestedScrollEnabled={true}
               scrollEnabled={false}
-              data={CoinsData?.data?.coins}
+              data={CoinsData.data.coins}
               keyExtractor={(item) => item.uuid}
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
             />
-          )}
+          ) : (
+  <Text>No data available. Please try again later.</Text>
+)}
+          
           </View>
         </ScrollView>
       </View>
+      <View style={{ position: 'absolute', zIndex: 10, bottom: 5, right: 10, width: 50, height: 50}}>
+  <FloatingButton />
+</View>
     </SafeAreaView>
   );
 };

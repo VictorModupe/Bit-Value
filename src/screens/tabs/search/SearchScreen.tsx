@@ -134,7 +134,7 @@ const SearchScreen =()=>{
           onChangeText={handleTextDebounce}
           placeholder="Search for Coins"
           placeholderTextColor="gray"
-          className="pl-12 flex-1 font-medium text-black tracking-wider"
+          className="pl-12 flex-1 font-medium text-black border-[#5170ff] tracking-wider"
          />
          <Pressable onPress={()=> navigateHome("Home")}>
             <XMarkIcon size="25" color="black"/>

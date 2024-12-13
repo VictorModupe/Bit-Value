@@ -24,7 +24,7 @@ const AuthNavigation = () => {
     
     }}
       >
-        {/* <Stack.Screen name='Home' component={HomeScreen} /> */}
+        <Stack.Screen name='HomeScreen' component={HomeScreen} />
         <Stack.Screen name='Splash' component={SplashScreen} />
         <Stack.Screen name='Welcome' component={WelcomeScreen} />
         <Stack.Screen name='Login' component={LoginScreen} />

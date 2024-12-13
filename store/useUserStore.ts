@@ -20,7 +20,7 @@ export const useUserStore = create(
             isLoggedIn: false,
             IsOnboarded: false,
             setUser: (user: User | null) => set((state)=> ({user})),
-            setIsLoggedIn: (isLoggedIn: boolean) => set((state)=> ({isLoggedIn})),
+            setIsLoggedIn: (isLoggedIn: Boolean) => set((state)=> ({isLoggedIn})),
             setSession:(session: Session | null) => set((state) => ({session})),
         }),
         {

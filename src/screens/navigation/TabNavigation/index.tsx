@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,20 +30,26 @@ const TabNavigation = () => {
             iconName = 'person-outline';
           }
 
+          const customizeSize = 25
+
           return (
             <Ionicons
               name={iconName}
-              size={25}
-              color={focused ? '#7c04e0' : 'gray'}
+              size={customizeSize}
+              color={focused ? '#5170ff' : 'gray'}
             />
           );
         },
-        tabBarActiveTintColor: '#7c04e0',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: '#5170ff',
+        tabBarInactiveTintColor: 'black',
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: 'bold',
+          fontWeight: 'bold'
         },
+        // ...TransitionPresets.SlideFromRightIOS,
+        // animationEnabled: true,
+        // gestureEnabled: true,
+        // gestureDirection: "horizontal",
       })}
     >
       <Tab.Screen name="Home" component={HomeNavigation} />
@@ -57,4 +62,5 @@ const TabNavigation = () => {
 };
 
 export default TabNavigation;
+
 
