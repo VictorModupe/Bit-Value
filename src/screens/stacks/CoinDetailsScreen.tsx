@@ -12,23 +12,27 @@ import { useQuery } from '@tanstack/react-query';
 import Animated, { SharedValue } from 'react-native-reanimated';
 import { Circle, useFont } from '@shopify/react-native-skia';
 
+
+
 const CoinDetailsScreen = () => {
-    const [lineData, setLineData] = useState<any>([]);
-    const [item, setItem] = useState<any>({});
-    const [coins, setCoins] = useState([]);
-    // type LineData = { price: number; timestamp: number };
-    // const [lineData, setLineData] = useState<LineData[]>([]);
-    // const [item, setItem] = useState<{ [key: string]: any }>({});
+    // const [lineData, setLineData] = useState<any>([]);
+    // const [item, setItem] = useState<any>({});
+    // const [coins, setCoins] = useState([]);
+    type LineData = { price: number; timestamp: number };
+    const [lineData, setLineData] = useState<LineData[]>([]);
+    const [item, setItem] = useState<{ [key: string]: any }>({});
+
+
     const navigation = useNavigation();
 
     const { params } = useRoute();
     const coinUuid = params?.coinUuid || "";
 
     
-
     // if (!font) {
     //     return <ActivityIndicator size="large" color="black" />;
     // } 
+    
     const font = useFont(
         require("../../../assets/fonts/PlusJakartaSans-Bold.ttf"),
         12
@@ -102,8 +106,9 @@ const CoinDetailsScreen = () => {
                     </View>
 
                     <View className='px-4 justify-center items-center py-2'>
-                        <Text className={`font-medium text-sm text-neutral-500`}>
-                            {numeral(parseFloat(item?.price.price)).format("$0,0.00")}
+                        {/* <Text className={`font-medium text-sm text-neutral-500`}> */}
+                        <Text className={`font-extrabold text-2xl`}>
+                            {numeral(parseFloat(item?.price)).format("$0,0.00")}
                         </Text>
                     </View>
 
@@ -137,14 +142,12 @@ const CoinDetailsScreen = () => {
                                                 : item.change > 0
                                                 ? 'text-green-600'
                                                 : 'text-gray-600'
-                                            }`
-                                            }
-                                            >
+                                            }`}
+                                        >
                                             {item.change}%
                                             </Text>
-
-                                    </View>                                   
-                                </View>
+                                        </View>                                   
+                                    </View>
                                 <View className="w-[29%] justify-start items-end">
                                         <Text className="font-bold text-base">{item.symbol}</Text>
                                     
@@ -162,7 +165,7 @@ const CoinDetailsScreen = () => {
                     )}
                 </SafeAreaView>
             )}     
-        <View style={{height: 400, paddingHorizontal:10}}>
+        {/* <View style={{height: 400, paddingHorizontal:10}}>
             {lineData && (
                     <CartesianChart
                     chartPressState={state}
@@ -171,7 +174,7 @@ const CoinDetailsScreen = () => {
                         tickCount: 8,
                         labelOffset:{x: -1, y: 0},
                         labelColor:"green",
-                        formatXLabel:(ms) => format(new Date(ms * 1000), "MM/dd")
+                        formatXLabel:(ms) => format(new Date(ms * 1000), "MM/dd"),
                     }}
                     data ={lineData}
                     xKey='timestamp'
@@ -181,22 +184,65 @@ const CoinDetailsScreen = () => {
                             <>
                             <Line points={points.price} color="green" strokeWidth={2}
                             />
-                            {isActive && (
-                                    <ToolTip
-                                    x={state.x.position}
-                                    y={state.y.price.position}
-                                    />
-                                )}
+                    {isActive && state?.x?.position != null && state?.y?.price?.position != null && (
+                        <ToolTip
+                            x={state.x.position || 0} // Provide a fallback
+                            y={state.y.price.position || 0} // Provide a fallback
+                        />
+                    )}
                             </>
                         )}
                     </CartesianChart>
                 )}
-        </View>   
+        </View>    */}
+        <View style={{ height: 400, paddingHorizontal: 10 }}>
+    {lineData && Array.isArray(lineData) && lineData.length > 0 ? (
+        <CartesianChart
+            chartPressState={state}
+            axisOptions={{
+                font,
+                tickCount: 8,
+                labelOffset: { x: -1, y: 0 },
+                labelColor: "green",
+                formatXLabel: (ms) =>
+                    ms ? format(new Date(ms * 1000), "MM/dd") : "Invalid",
+            }}
+            data={lineData}
+            xKey="timestamp"
+            yKeys={["price"]}
+        >
+            {({ points }) => (
+                <>
+                    {points?.price && (
+                        <Line
+                            points={points.price}
+                            color="green"
+                            strokeWidth={2}
+                        />
+                    )}
+                    {isActive &&
+                        state?.x?.position != null &&
+                        state?.y?.price?.position != null && (
+                            <ToolTip
+                                x={state.x.position || 0}
+                                y={state.y.price.position || 0}
+                            />
+                        )}
+                </>
+            )}
+        </CartesianChart>
+    ) : (
+        <Text>No data available</Text>
+    )}
+</View>
+
 
         <View className='px-4 py-4'>
             {/* All Time High */}
             <View className='flex-row justify-between'>
-                <Text className='text-base font-bold text-neutral-500'>All Time High</Text>
+                <Text className='text-base font-bold text-neutral-500'>
+                    All Time High
+                    </Text>
                 <Text className={`font-bold text-base`}>
                     {numeral(parseFloat(item?.allTimeHigh?.price)).format("$0,0.00")}
                 </Text>
